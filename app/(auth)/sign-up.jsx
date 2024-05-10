@@ -1,11 +1,13 @@
 
-import { Image, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { Alert, Image, ScrollView, StyleSheet, Text, View } from 'react-native'
 import React,{useState} from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { images } from '../../constants'
 import CustomButton from '../../components/CustomButton'
 import FormField from '../../components/FormField'
-import { Link } from 'expo-router'
+import { Link, router } from 'expo-router'
+import { useGlobalContext } from '../../context/GlobalProvider'
+import { createUser } from '../../lib/appwrite'
 export default function SignUp() {
   const [form, setForm] = useState({
     username: '',
@@ -14,10 +16,31 @@ export default function SignUp() {
   
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
+		const { setUser, setIsLoggedIn } = useGlobalContext();
 
-  const submit = () => {
-    console.log(form)
-  }
+  const submit = async () => {
+		if (!form.username || !form.email || !form.password) {
+			Alert.alert("Error", "Please fill all fields");
+		}
+		setIsSubmitting(true);
+		try {
+			const res = await createUser(
+				form.email,
+				form.password,
+				form.username
+			);
+			setUser(res);
+			setIsLoggedIn(true);
+			
+
+			// set it to global state
+			router.replace("/home");
+		} catch (error) {
+			Alert.alert("Error", error.message);
+		} finally {
+			setIsSubmitting(false);
+		}
+  };
   return (
 		<SafeAreaView className="bg-primary h-full">
 			<ScrollView>
@@ -32,16 +55,15 @@ export default function SignUp() {
 					</Text>
 					<FormField
 						title="Username"
-						vlaue={form.username}
+						value={form.username}
 						handleChangeText={(text) =>
 							setForm({ ...form, username: text })
 						}
 						otherStyles="mt-10"
-						
 					/>
 					<FormField
 						title="Email"
-						vlaue={form.email}
+						value={form.email}
 						handleChangeText={(text) =>
 							setForm({ ...form, email: text })
 						}
@@ -56,22 +78,19 @@ export default function SignUp() {
 						}
 						otherStyles="mt-2"
 					/>
-
 					<CustomButton
 						title="Sign in"
 						otherStyles="mt-5"
 						isLoading={isSubmitting}
 						onPress={submit}
 					/>
-
 					<View className="justify-center pt-5 flex-row gap-2">
 						<Text className="text-lg text-gray-100 font-pregular">
 							Have an account already?
 						</Text>
 						<Link
 							className="text-lg font-psemibold text-secondary"
-							href="/sign-in"
-						>
+							href="/sign-in">
 							Sign In
 						</Link>
 					</View>
