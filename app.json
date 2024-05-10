@@ -16,9 +16,11 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
-    },
+		"package": "com.PhoenixLogic.Aora",
+		"supportsTablet": true
+	},
     "android": {
+      "package": "com.PhoenixLogic.Aora",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
