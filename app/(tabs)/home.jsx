@@ -6,5 +6,6 @@ export default function Home() {
     <View>
       <Text>Home</Text>
     </View>
+
   )
 }

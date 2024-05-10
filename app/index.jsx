@@ -8,11 +8,9 @@ import CustomButton from "../components/CustomButton";
 import { useGlobalContext } from "../context/GlobalProvider";
 export default function App() {
 
-	const { isLoading, isLoggedIn } = useGlobalContext()
-	if (!isLoading && isLoggedIn) {
-		return <Redirect to="/home" />
-	}
-	
+	const { loading, isLogged } = useGlobalContext();
+	  if (!loading && isLogged) return <Redirect href="/home" />;
+
 	return (
 		<SafeAreaView className="bg-primary h-full">
 			<ScrollView contentContainerStyle={{ height: "100%" }}>
@@ -47,7 +45,7 @@ export default function App() {
 					<CustomButton
 						containerStyles="w-full mt-5"
 						title="Continue with Email"
-						onPress={() => router.push("/sign-in")}
+						onPress={() => router.push("/sign-up")}
 					/>
 				</View>
 			</ScrollView>

@@ -12,11 +12,11 @@ import { images } from "../../constants";
 import CustomButton from "../../components/CustomButton";
 import FormField from "../../components/FormField";
 import { Link } from "expo-router";
-import { useGlobalContext } from "../context/GlobalProvider";
+import { useGlobalContext } from "../../context/GlobalProvider";
 
 import { getCurrentUser, signIn } from "../../lib/appwrite";
 export default function SignIn() {
-	const { setUser, setIsLoggedIn } = useGlobalContext();
+	const { setUser, setIsLogged } = useGlobalContext();
 	const [form, setForm] = useState({
 		email: "",
 		password: "",
@@ -28,11 +28,12 @@ export default function SignIn() {
 		}
 		setIsSubmitting(true);
 		try {
-      await signIn(form.email, form.password);
-      const res = await getCurrentUser();
-      setUser(res);
-      setIsLoggedIn(true);
-			// set it to global state
+			await signIn(form.email, form.password);
+			const res = await getCurrentUser();
+			setUser(res);
+			setIsLogged(true);
+
+			Alert.alert("Success", "User signed in successfully");
 			router.replace("/home");
 		} catch (error) {
 			Alert.alert("Error", error.message);

@@ -16,7 +16,7 @@ export default function SignUp() {
   
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
-		const { setUser, setIsLoggedIn } = useGlobalContext();
+		 const { setUser, setIsLogged } = useGlobalContext();
 
   const submit = async () => {
 		if (!form.username || !form.email || !form.password) {
@@ -30,7 +30,7 @@ export default function SignUp() {
 				form.username
 			);
 			setUser(res);
-			setIsLoggedIn(true);
+			setIsLogged(true);
 			
 
 			// set it to global state
