@@ -14,58 +14,30 @@ import SearchInput from "../../components/SearchInput";
 import Trending from "../../components/Trending";
 import EmptyState from "../../components/EmptyState";
 import { getAllPosts } from "../../lib/appwrite";
-
+import useAppwrite from "../../lib/useAppwrite";
+import VideoCard from "../../components/VideoCard";
 
 const Home = () => {
-
-
+	const { data: posts, refetch } = useAppwrite(getAllPosts);
 	const [refreshing, setRefreshing] = useState(false);
-	const [data, setData] = useState([]);
-	const [isLoading, setIsLoading] = useState(true);
-	useEffect(() => {
-		const fetchData = async () => {
-			setIsLoading(false)
-			try {
-				const response = await getAllPosts();
-
-				setData(response);
-			}
-			catch (error) {
-				Alert.alert('Error',error.message)
-			}
-			finally {
-				setIsLoading(false)
-			}
-		}
-	})
+	console.log(posts);
 	const onRefresh = async () => {
 		setRefreshing(true);
-/* 		await refetch(); */
+		await refetch();
 		setRefreshing(false);
 	};
-
-	// one flatlist
-	// with list header
-	// and horizontal flatlist
-
-	//  we cannot do that with just scrollview as there's both horizontal and vertical scroll (two flat lists, within trending)
 
 	return (
 		<SafeAreaView className="bg-primary h-full">
 			<FlatList
-				data={{
-					id:1
-				}}
+				data={posts}
 				keyExtractor={(item) => item.$id}
 				renderItem={({ item }) => (
-				/* 	<VideoCard
+					<VideoCard
 						title={item.title}
 						thumbnail={item.thumbnail}
 						video={item.video}
-						creator={item.creator.username}
-						avatar={item.creator.avatar}
-					/> */
-					<Text>item.id</Text>
+				/>
 				)}
 				ListHeaderComponent={() => (
 					<View className="flex my-6 px-4 space-y-6">
@@ -88,23 +60,23 @@ const Home = () => {
 							</View>
 						</View>
 
-					<SearchInput />
+						<SearchInput />
 
 						<View className="w-full flex-1 pt-5 pb-8">
 							<Text className="text-lg font-pregular text-gray-100 mb-3">
 								Latest Videos
 							</Text>
 
-					 		<Trending posts={[]??[]} />
+							<Trending posts={[] ?? []} />
 						</View>
 					</View>
 				)}
-			 	ListEmptyComponent={() => (
+				ListEmptyComponent={() => (
 					<EmptyState
 						title="No Videos Found"
 						subtitle="No videos created yet"
 					/>
-				)} 
+				)}
 				refreshControl={
 					<RefreshControl
 						refreshing={refreshing}
