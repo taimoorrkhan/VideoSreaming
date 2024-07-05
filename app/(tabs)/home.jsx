@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
+	Alert,
 	FlatList,
 	Image,
 	RefreshControl,
@@ -10,16 +11,36 @@ import {
 
 import { images } from "../../constants";
 import SearchInput from "../../components/SearchInput";
+import Trending from "../../components/Trending";
+import EmptyState from "../../components/EmptyState";
+import { getAllPosts } from "../../lib/appwrite";
 
 
 const Home = () => {
 
 
 	const [refreshing, setRefreshing] = useState(false);
+	const [data, setData] = useState([]);
+	const [isLoading, setIsLoading] = useState(true);
+	useEffect(() => {
+		const fetchData = async () => {
+			setIsLoading(false)
+			try {
+				const response = await getAllPosts();
 
+				setData(response);
+			}
+			catch (error) {
+				Alert.alert('Error',error.message)
+			}
+			finally {
+				setIsLoading(false)
+			}
+		}
+	})
 	const onRefresh = async () => {
 		setRefreshing(true);
-		await refetch();
+/* 		await refetch(); */
 		setRefreshing(false);
 	};
 
@@ -30,7 +51,7 @@ const Home = () => {
 	//  we cannot do that with just scrollview as there's both horizontal and vertical scroll (two flat lists, within trending)
 
 	return (
-		<SafeAreaView className="bg-primary">
+		<SafeAreaView className="bg-primary h-full">
 			<FlatList
 				data={{
 					id:1
@@ -74,16 +95,16 @@ const Home = () => {
 								Latest Videos
 							</Text>
 
-					{/* 		<Trending posts={latestPosts ?? []} /> */}
+					 		<Trending posts={[]??[]} />
 						</View>
 					</View>
 				)}
-			/* 	ListEmptyComponent={() => (
+			 	ListEmptyComponent={() => (
 					<EmptyState
 						title="No Videos Found"
 						subtitle="No videos created yet"
 					/>
-				)} */
+				)} 
 				refreshControl={
 					<RefreshControl
 						refreshing={refreshing}
