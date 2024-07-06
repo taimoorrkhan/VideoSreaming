@@ -50,7 +50,8 @@ const VideoCard = ({ title, creator, avatar, thumbnail, video }) => {
 					className="w-full h-60 rounded-xl mt-3"
 					resizeMode={ResizeMode.CONTAIN}
 					useNativeControls
-					shouldPlay
+          shouldPlay
+          
 					onPlaybackStatusUpdate={(status) => {
 						if (status.didJustFinish) {
 							setPlay(false);
