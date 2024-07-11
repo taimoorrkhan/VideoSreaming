@@ -45,7 +45,8 @@ const Search = () => {
 
 							<View className="mt-6 mb-8">
 								<SearchInput
-								
+									initialQuery={query}
+									refetch={refetch}
 								/>
 							</View>
 						</View>
