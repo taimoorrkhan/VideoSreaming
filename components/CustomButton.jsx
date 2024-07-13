@@ -1,17 +1,41 @@
-import { View, Text,TouchableOpacity } from 'react-native'
-import React from 'react'
+import {
+	ActivityIndicator,
+	Text,
+	TouchableOpacity,
+} from "react-native";
 
-export default function CustomButton({ onPress, title, containerStyles ,textStyles,isLoading}) {
+const CustomButton = ({
+	title,
+	handlePress,
+	containerStyles,
+	textStyles,
+	isLoading,
+}) => {
 	return (
 		<TouchableOpacity
-      onPress={onPress}
-      activeOpacity={0.7}
-      disabled={isLoading}
-			className={`bg-secondary-200 w-full py-3 mt-5 rounded-lg ${containerStyles} ${isLoading ? 'opacity-50' : ''}`}
+			onPress={handlePress}
+			activeOpacity={0.7}
+			className={`bg-secondary rounded-xl min-h-[62px] flex flex-row justify-center items-center ${containerStyles} ${
+				isLoading ? "opacity-50" : ""
+			}`}
+			disabled={isLoading}
 		>
-			<Text className={`text-primary text-lg text-center font-psemibold ${textStyles}`}>
+			<Text
+				className={`text-primary font-psemibold text-lg ${textStyles}`}
+			>
 				{title}
 			</Text>
+
+			{isLoading && (
+				<ActivityIndicator
+					animating={isLoading}
+					color="#fff"
+					size="small"
+					className="ml-2"
+				/>
+			)}
 		</TouchableOpacity>
 	);
-}
+};
+
+export default CustomButton;
