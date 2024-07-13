@@ -17,9 +17,11 @@ import { createVideoPost } from "../../lib/appwrite";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import CustomButton from "../../components/CustomButton";
 import FormField from "../../components/FormField"
+import * as ImagePicker from "expo-image-picker";
 
 const Create = () => {
 	const { user } = useGlobalContext();
+	console.log(user.$id)
 	const [uploading, setUploading] = useState(false);
 	const [form, setForm] = useState({
 		title: "",
@@ -29,11 +31,11 @@ const Create = () => {
 	});
 
 	const openPicker = async (selectType) => {
-		const result = await DocumentPicker.getDocumentAsync({
-			type:
-				selectType === "image"
-					? ["image/png", "image/jpg"]
-					: ["video/mp4", "video/gif"],
+		const result = await ImagePicker.launchImageLibraryAsync({
+			mediaTypes: selectType === 'image' ? ImagePicker.MediaTypeOptions.Images : ImagePicker.MediaTypeOptions.Videos,
+			aspect: [4, 3],
+			quality: 1,
+			videoQuality:1
 		});
 
 		if (!result.canceled) {
@@ -122,9 +124,9 @@ const Create = () => {
 							<Video
 								source={{ uri: form.video.uri }}
 								className="w-full h-64 rounded-2xl"
-								useNativeControls
+								
 								resizeMode={ResizeMode.COVER}
-								isLooping
+								
 							/>
 						) : (
 							<View className="w-full h-40 px-4 bg-black-100 rounded-2xl border border-black-200 flex justify-center items-center">
